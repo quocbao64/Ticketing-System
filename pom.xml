@@ -19,7 +19,6 @@
         <module>discovery-server</module>
         <module>car-service</module>
         <module>customer-service</module>
-        <module>buses-service</module>
         <module>ticket-service</module>
         <module>email-service</module>
         <module>payment-service</module>
