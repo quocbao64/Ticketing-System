@@ -50,8 +50,6 @@ pipeline {
 }
 
 def buildAndPushDockerImage(serviceName, dockerfilePath) {
-    dir(serviceName) {
-        sh "docker build -t ${DOCKER_REGISTRY}/${serviceName}:${DOCKER_TAG} -f ${dockerfilePath} ."
-        sh "docker push ${DOCKER_REGISTRY}/${serviceName}:${DOCKER_TAG}"
-    }
+    sh "docker build -t ${DOCKER_REGISTRY}/${serviceName}:${DOCKER_TAG} -f ${serviceName}/${dockerfilePath} ."
+    sh "docker push ${DOCKER_REGISTRY}/${serviceName}:${DOCKER_TAG}"
 }
