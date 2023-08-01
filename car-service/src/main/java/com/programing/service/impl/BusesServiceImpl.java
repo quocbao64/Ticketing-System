@@ -1,8 +1,9 @@
 package com.programing.service.impl;
 
-import com.programing.dto.request.BusesRequest;
-import com.programing.dto.response.BusesResponse;
-import com.programing.dto.response.CarResponse;
+import com.programing.model.UpdateQuantityTicket;
+import com.programing.model.request.BusesRequest;
+import com.programing.model.response.BusesResponse;
+import com.programing.model.response.CarResponse;
 import com.programing.entity.Buses;
 import com.programing.entity.Car;
 import com.programing.exception.BadRequestException;
@@ -11,6 +12,7 @@ import com.programing.repository.BusesRepository;
 import com.programing.repository.CarRepository;
 import com.programing.service.BusesService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -126,25 +128,40 @@ public class BusesServiceImpl implements BusesService {
         busesRepository.delete(buses);
     }
 
-    @Override
-    public void increaseTicket(Long id, Integer quantity) {
-        Buses buses = busesRepository.findById(id).orElseThrow(() -> {
+//    @Override
+    @KafkaListener(
+            topics = "cancel-order"
+            ,groupId = "group_id_cancel_order"
+    )
+    public void increaseTicket(UpdateQuantityTicket request) {
+        Buses buses = busesRepository.findById(request.getId()).orElseThrow(() -> {
             throw new NotFoundException(404, "ID is not found!");
         });
 
-        if(null!=quantity) buses.increase(quantity);
+        if(null!=request.getQuantity()) buses.increase(request.getQuantity());
 
         busesRepository.save(buses);
     }
 
-    @Override
-    public void reduceTicket(Long id, Integer quantity) {
-        Buses buses = busesRepository.findById(id).orElseThrow(() -> {
-            throw new NotFoundException(404, "ID is not found!");
-        });
+    @KafkaListener(
+            topics = "create-order",
+            groupId = "group_id_create_order"
+    )
+    public void reduceTicket(UpdateQuantityTicket request) {
+        try {
+            System.out.println("Request: " + request.getId());
+            Buses buses = busesRepository.findById(request.getId())
+                    .orElseThrow(() -> new NotFoundException(404, "ID is not found!"));
 
-        if(null!=quantity) buses.reduce(quantity);
-
-        busesRepository.save(buses);
+            if (request.getQuantity() != null) {
+                buses.reduce(request.getQuantity());
+                busesRepository.save(buses);
+            }
+        } catch (NotFoundException ex) {
+            // Handle NotFoundException here
+            // For example, you can log the error or send a response to a specific topic.
+            System.err.println("NotFoundException: " + ex.getMessage());
+        }
     }
+
 }

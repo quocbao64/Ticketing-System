@@ -1,7 +1,7 @@
 package com.programing.service.impl;
 
-import com.programing.dto.request.CarRequest;
-import com.programing.dto.response.CarResponse;
+import com.programing.model.request.CarRequest;
+import com.programing.model.response.CarResponse;
 import com.programing.entity.Car;
 import com.programing.exception.BadRequestException;
 import com.programing.exception.NotFoundException;
