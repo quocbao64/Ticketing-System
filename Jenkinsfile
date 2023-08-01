@@ -59,6 +59,6 @@ def pushDockerImage(serviceName) {
         credentialsId: 'dockerhub',
         url: ""
     ]) {
-        bat "docker push ${DOCKER_REGISTRY}/${serviceName}:${DOCKER_TAG}"
+        sh "docker push ${DOCKER_REGISTRY}/${serviceName}:${DOCKER_TAG}"
     }
 }
