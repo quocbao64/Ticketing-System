@@ -19,37 +19,45 @@ pipeline {
 
         stage('Build Car Service') {
             steps {
-                buildAndPushDockerImage('car-service', 'Dockerfile')
+                buildDockerImage('car-service', 'Dockerfile')
+                pushDockerImage('car-service')
             }
         }
 
         stage('Build Customer Service') {
             steps {
-                buildAndPushDockerImage('customer-service', 'Dockerfile')
+                buildDockerImage('customer-service', 'Dockerfile')
             }
         }
 
 //        stage('Build Email Service') {
 //            steps {
-//                buildAndPushDockerImage('email-service', 'Dockerfile')
+//                buildDockerImage('email-service', 'Dockerfile')
 //            }
 //        }
 //
 //        stage('Build Payment Service') {
 //            steps {
-//                buildAndPushDockerImage('payment-service', 'Dockerfile')
+//                buildDockerImage('payment-service', 'Dockerfile')
 //            }
 //        }
 //
 //        stage('Build Ticket Service') {
 //            steps {
-//                buildAndPushDockerImage('ticket-service', 'Dockerfile')
+//                buildDockerImage('ticket-service', 'Dockerfile')
 //            }
 //        }
     }
 }
 
-def buildAndPushDockerImage(serviceName, dockerfilePath) {
+def buildDockerImage(serviceName, dockerfilePath) {
     sh "docker build -t ${DOCKER_REGISTRY}/${serviceName}:${DOCKER_TAG} -f ${serviceName}/${dockerfilePath} ."
-    sh "docker push ${DOCKER_REGISTRY}/${serviceName}:${DOCKER_TAG}"
+}
+
+def pushDockerImage(serviceName) {
+    withDockerRegistry([
+        credentialsId: 'dockerhub',
+        url: "",
+        bat "docker push ${DOCKER_REGISTRY}/${serviceName}:${DOCKER_TAG}"
+    ])
 }
