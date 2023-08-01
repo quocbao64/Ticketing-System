@@ -27,26 +27,30 @@ pipeline {
         stage('Build Customer Service') {
             steps {
                 buildDockerImage('customer-service', 'Dockerfile')
+                pushDockerImage('customer-service')
             }
         }
 
-//        stage('Build Email Service') {
-//            steps {
-//                buildDockerImage('email-service', 'Dockerfile')
-//            }
-//        }
-//
-//        stage('Build Payment Service') {
-//            steps {
-//                buildDockerImage('payment-service', 'Dockerfile')
-//            }
-//        }
-//
-//        stage('Build Ticket Service') {
-//            steps {
-//                buildDockerImage('ticket-service', 'Dockerfile')
-//            }
-//        }
+        // stage('Build Email Service') {
+        //     steps {
+        //         buildDockerImage('email-service', 'Dockerfile')
+        //         pushDockerImage('email-service')
+        //     }
+        // }
+
+        // stage('Build Payment Service') {
+        //     steps {
+        //         buildDockerImage('payment-service', 'Dockerfile')
+        //         pushDockerImage('payment-service')
+        //     }
+        // }
+
+        // stage('Build Ticket Service') {
+        //     steps {
+        //         buildDockerImage('ticket-service', 'Dockerfile')
+        //         pushDockerImage('ticket-service')
+        //     }
+        // }
     }
 }
 
