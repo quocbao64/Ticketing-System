@@ -57,7 +57,8 @@ def buildDockerImage(serviceName, dockerfilePath) {
 def pushDockerImage(serviceName) {
     withDockerRegistry([
         credentialsId: 'dockerhub',
-        url: "",
+        url: ""
+    ]) {
         bat "docker push ${DOCKER_REGISTRY}/${serviceName}:${DOCKER_TAG}"
-    ])
+    }
 }
