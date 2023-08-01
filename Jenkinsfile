@@ -6,6 +6,10 @@ pipeline {
         DOCKER_TAG = 'latest'
     }
 
+    options {
+        skipDefaultCheckout()
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -13,20 +17,35 @@ pipeline {
             }
         }
 
-        stage('Build and Push Docker Images') {
+        stage('Build Car Service') {
             steps {
                 buildAndPushDockerImage('car-service', 'Dockerfile')
-
-                buildAndPushDockerImage('customer-service', 'Dockerfile')
-
-                buildAndPushDockerImage('email-service', 'Dockerfile')
-
-                buildAndPushDockerImage('payment-service', 'Dockerfile')
-
-                buildAndPushDockerImage('ticket-service', 'Dockerfile')
-
             }
         }
+
+        stage('Build Customer Service') {
+            steps {
+                buildAndPushDockerImage('customer-service', 'Dockerfile')
+            }
+        }
+
+//        stage('Build Email Service') {
+//            steps {
+//                buildAndPushDockerImage('email-service', 'Dockerfile')
+//            }
+//        }
+//
+//        stage('Build Payment Service') {
+//            steps {
+//                buildAndPushDockerImage('payment-service', 'Dockerfile')
+//            }
+//        }
+//
+//        stage('Build Ticket Service') {
+//            steps {
+//                buildAndPushDockerImage('ticket-service', 'Dockerfile')
+//            }
+//        }
     }
 }
 
