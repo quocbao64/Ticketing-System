@@ -4,14 +4,15 @@ FROM maven:3-openjdk-17 as build
 ENV HOME=/app
 
 WORKDIR $HOME
-# comment
+
 COPY ./ $HOME
+
 RUN --mount=type=cache,target=/root/.m2 mvn -f $HOME/pom.xml -DskipTests clean package
 
 # docker build stage
 FROM openjdk:17-alpine
 
-COPY --from=build /app/target/*.jar email.jar
+COPY --from=build /app/email-service/*.jar email.jar
 
 ENV PORT=8085
 EXPOSE $PORT
