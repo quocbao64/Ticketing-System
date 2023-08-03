@@ -17,40 +17,40 @@ pipeline {
             }
         }
 
-        stage('Build Car Service') {
+        stage('Build and Deploy Car Service') {
             steps {
                 buildDockerImage('car-service', 'Dockerfile')
                 pushDockerImage('car-service')
             }
         }
 
-        stage('Build Customer Service') {
+        stage('Build and Deploy Customer Service') {
             steps {
                 buildDockerImage('customer-service', 'Dockerfile')
                 pushDockerImage('customer-service')
             }
         }
 
-        // stage('Build Email Service') {
-        //     steps {
-        //         buildDockerImage('email-service', 'Dockerfile')
-        //         pushDockerImage('email-service')
-        //     }
-        // }
+        stage('Build and Deploy Email Service') {
+            steps {
+                buildDockerImage('email-service', 'Dockerfile')
+                pushDockerImage('email-service')
+            }
+        }
 
-        // stage('Build Payment Service') {
-        //     steps {
-        //         buildDockerImage('payment-service', 'Dockerfile')
-        //         pushDockerImage('payment-service')
-        //     }
-        // }
+        stage('Build and Deploy Payment Service') {
+            steps {
+                buildDockerImage('payment-service', 'Dockerfile')
+                pushDockerImage('payment-service')
+            }
+        }
 
-        // stage('Build Ticket Service') {
-        //     steps {
-        //         buildDockerImage('ticket-service', 'Dockerfile')
-        //         pushDockerImage('ticket-service')
-        //     }
-        // }
+        stage('Build and Deploy Ticket Service') {
+            steps {
+                buildDockerImage('ticket-service', 'Dockerfile')
+                pushDockerImage('ticket-service')
+            }
+        }
     }
 }
 
