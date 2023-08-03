@@ -12,7 +12,7 @@ RUN --mount=type=cache,target=/root/.m2 mvn -f $HOME/pom.xml -DskipTests clean p
 # docker build stage
 FROM openjdk:17-alpine
 
-COPY --from=build /app/ticket-service/target/*.jar order.jar
+COPY --from=build /app/order-service/target/*.jar order.jar
 
 ENV PORT=8084
 EXPOSE $PORT
