@@ -1,7 +1,7 @@
 package com.programing.service;
 
-import com.programing.dto.request.BusesRequest;
-import com.programing.dto.response.BusesResponse;
+import com.programing.model.request.BusesRequest;
+import com.programing.model.response.BusesResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +19,8 @@ public interface BusesService {
 
     void delete(Long id);
 
-    void increaseTicket(Long id, Integer quantity);
+//    void increaseTicket(UpdateQuantityTicket request);
 
-    void reduceTicket(Long id, Integer quantity);
+//    void reduceTicket(UpdateQuantityTicket request);
 
 }

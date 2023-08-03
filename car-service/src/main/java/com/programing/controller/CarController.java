@@ -1,7 +1,7 @@
 package com.programing.controller;
 
-import com.programing.dto.request.CarRequest;
-import com.programing.dto.response.CarResponse;
+import com.programing.model.request.CarRequest;
+import com.programing.model.response.CarResponse;
 import com.programing.service.CarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

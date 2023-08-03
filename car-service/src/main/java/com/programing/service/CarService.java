@@ -1,7 +1,7 @@
 package com.programing.service;
 
-import com.programing.dto.request.CarRequest;
-import com.programing.dto.response.CarResponse;
+import com.programing.model.request.CarRequest;
+import com.programing.model.response.CarResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

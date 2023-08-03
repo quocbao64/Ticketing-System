@@ -1,7 +1,7 @@
 package com.programing.controller;
 
-import com.programing.dto.request.BusesRequest;
-import com.programing.dto.response.BusesResponse;
+import com.programing.model.request.BusesRequest;
+import com.programing.model.response.BusesResponse;
 import com.programing.service.BusesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,16 +47,16 @@ public class BusesController {
         busesService.delete(id);
     }
 
-    @PostMapping("/{id}/increase-ticket")
-    public void increaseTicket(@PathVariable("id")Long id,
-                               @RequestParam("quantity")Integer quantity) {
-        busesService.increaseTicket(id, quantity);
-    }
-
-    @PostMapping("/{id}/reduce-ticket")
-    public void reduceTicket(@PathVariable("id")Long id,
-                               @RequestParam("quantity")Integer quantity) {
-        busesService.reduceTicket(id, quantity);
-    }
+//    @PostMapping("/{id}/increase-ticket")
+//    public void increaseTicket(@PathVariable("id")Long id,
+//                               @RequestParam("quantity")Integer quantity) {
+//        busesService.increaseTicket(id, quantity);
+//    }
+//
+//    @PostMapping("/{id}/reduce-ticket")
+//    public void reduceTicket(@PathVariable("id")Long id,
+//                               @RequestParam("quantity")Integer quantity) {
+//        busesService.reduceTicket(id, quantity);
+//    }
 
 }
