@@ -24,13 +24,6 @@ pipeline {
             }
         }
 
-        stage('Build and Deploy Customer Service') {
-            steps {
-                buildDockerImage('customer-service', 'Dockerfile')
-                pushDockerImage('customer-service')
-            }
-        }
-
         stage('Build and Deploy Email Service') {
             steps {
                 buildDockerImage('email-service', 'Dockerfile')
@@ -45,10 +38,10 @@ pipeline {
             }
         }
 
-        stage('Build and Deploy Ticket Service') {
+        stage('Build and Deploy Order Service') {
             steps {
-                buildDockerImage('ticket-service', 'Dockerfile')
-                pushDockerImage('ticket-service')
+                buildDockerImage('order-service', 'Dockerfile')
+                pushDockerImage('order-service')
             }
         }
     }
