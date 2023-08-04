@@ -17,6 +17,12 @@ pipeline {
             }
         }
 
+        stage('Delete old Docker images') {
+            steps {
+                sh "docker rmi -f ${oldImageID}"
+            }
+        }
+
         stage('Build and Deploy Car Service') {
             steps {
                 buildDockerImage('car-service', 'Dockerfile')
