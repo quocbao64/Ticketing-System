@@ -44,6 +44,20 @@ pipeline {
                 pushDockerImage('order-service')
             }
         }
+
+        stage('Build and Deploy Api Gateway Service') {
+            steps {
+                buildDockerImage('api-gateway', 'Dockerfile')
+                pushDockerImage('api-gateway')
+            }
+        }
+
+        stage('Build and Deploy Discovery Service') {
+            steps {
+                buildDockerImage('discovery-server', 'Dockerfile')
+                pushDockerImage('discovery-server')
+            }
+        }
     }
 }
 
