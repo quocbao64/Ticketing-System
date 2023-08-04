@@ -19,7 +19,7 @@ pipeline {
 
         stage('Delete old Docker images') {
             steps {
-                sh "docker rmi -f ${oldImageID}"
+                sh "docker rmi \$(docker images -a -q)"
             }
         }
 
