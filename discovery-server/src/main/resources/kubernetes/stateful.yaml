@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: eureka
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: eureka
+      labels:
+        app: eureka
+    spec:
+      containers:
+        - name: eureka
+          image: quocbao64/discovery-server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8761
+          env:
+            - name: EUREKA_SERVER_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: eureka-cm
+                  key: eureka_service_address
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: eureka
+  serviceName: "eureka"

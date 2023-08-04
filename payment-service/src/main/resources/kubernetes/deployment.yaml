@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service-app
+  labels:
+    app: payment-service-app
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: payment-service-app
+      labels:
+        app: payment-service-app
+    spec:
+      containers:
+        - name: payment-service-app
+          image: quocbao64/payment-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8086
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: payment-service-app

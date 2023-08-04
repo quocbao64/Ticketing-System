@@ -12,7 +12,7 @@ RUN --mount=type=cache,target=/root/.m2 mvn -f $HOME/pom.xml -DskipTests clean p
 # docker build stage
 FROM openjdk:17-alpine
 
-COPY --from=build /app/email-service/*.jar email.jar
+COPY --from=build /app/email-service/target/*.jar email.jar
 
 ENV PORT=8085
 EXPOSE $PORT
