@@ -19,7 +19,7 @@ pipeline {
 
         stage('Delete old Docker images') {
             steps {
-                sh "docker rmi -f \$(docker images -a -q)"
+                sh "docker system prune -af --volumes"
             }
         }
 
