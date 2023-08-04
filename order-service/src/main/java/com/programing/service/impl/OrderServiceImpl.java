@@ -132,6 +132,7 @@ public class OrderServiceImpl implements OrderService {
                                                         .fullName(request.getFullName())
                                                         .build());
 
+        Date today = new Date();
         Order order = Order.builder()
                 .customer(customer)
                 .busesId(buses.getId())
@@ -139,7 +140,7 @@ public class OrderServiceImpl implements OrderService {
                 .quantity(request.getQuantity())
                 .totalPrice(buses.getTicketPrice()*request.getQuantity())
                 .statusPayment(false)
-                .paymentBeforeDate(new Date())
+                .paymentBeforeDate(new Date(today.getTime() + (3000 * 60 * 60 * 24)))
                 .build();
 
         orderRepository.save(order);
