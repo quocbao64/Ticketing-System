@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqldb-car
+  labels:
+    name: mysql-service
+spec:
+  selector:
+    app: mysqldb-car
+  ports:
+    - port: 3306
+      targetPort: 3306
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-car
+  labels:
+    app: mysqldb-car
+spec:
+  template:
+    metadata:
+      labels:
+        app: mysqldb-car
+    spec:
+      containers:
+        - name: mysqldb-car
+          image: mysql
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: /data/db
+              name: storage
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+            - name: MYSQL_DATABASE
+              value: ticket-car-service
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+  selector:
+    matchLabels:
+      app: mysqldb-car

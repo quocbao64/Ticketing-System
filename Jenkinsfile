@@ -19,7 +19,7 @@ pipeline {
 
         stage('Delete old Docker images') {
             steps {
-                sh "docker rmi \$(docker images -a -q)"
+                sh "docker system prune -af --volumes"
             }
         }
 
@@ -64,6 +64,16 @@ pipeline {
                 pushDockerImage('discovery-server')
             }
         }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                withCredentials([
+                        kubeconfigFile(credentialsId: 'k8s-credentials')
+                ]) {
+                    sh './deploy.sh'
+                }
+            }
+        }
     }
 }
 
@@ -73,8 +83,8 @@ def buildDockerImage(serviceName, dockerfilePath) {
 
 def pushDockerImage(serviceName) {
     withDockerRegistry([
-        credentialsId: 'dockerhub',
-        url: ""
+            credentialsId: 'dockerhub',
+            url          : ""
     ]) {
         sh "docker push ${DOCKER_REGISTRY}/${serviceName}:${DOCKER_TAG}"
     }

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: car-service-app
+  labels:
+    app: car-service-app
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: car-service-app
+      labels:
+        app: car-service-app
+    spec:
+      containers:
+        - name: car-service-app
+          image: quocbao64/car-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://mysqldb-car:3306/ticket-car-service
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: password
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: car-service-app

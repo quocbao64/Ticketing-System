@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service-app
+  labels:
+    app: order-service-app
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: order-service-app
+      labels:
+        app: order-service-app
+    spec:
+      containers:
+        - name: order-service-app
+          image: quocbao64/order-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8084
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://mysqldb-order:3306/ticket-order-service
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: password
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: order-service-app
