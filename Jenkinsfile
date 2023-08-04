@@ -67,10 +67,8 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                withCredentials([
-                        kubeconfigFile(credentialsId: 'k8s-credentials')
-                ]) {
-                    sh './deploy.sh'
+                withKubeConfig([credentialsId: 'k8s-credentials', serverUrl: '']) {
+                  sh './deploy.sh'
                 }
             }
         }
