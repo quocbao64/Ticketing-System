@@ -65,15 +65,15 @@ pipeline {
             }
         }
 
-        // stage('Deploy to Kubernetes') {
-        //     steps {
-        //         withCredentials([
-        //                 kubeconfigFile(credentialsId: 'k8s-credentials')
-        //         ]) {
-        //             sh './deploy.sh'
-        //         }
-        //     }
-        // }
+        stage('Deploy to Kubernetes') {
+            steps {
+                withCredentials([
+                        kubeconfigFile(credentialsId: 'k8s-credentials')
+                ]) {
+                    sh './deploy.sh'
+                }
+            }
+        }
     }
 }
 
