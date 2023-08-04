@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc-order
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqldb-order
+  labels:
+    name: mysql-service
+spec:
+  selector:
+    app: mysqldb-order
+  ports:
+    - port: 3307
+      targetPort: 3307
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-mysql
+  labels:
+    app: mysqldb-order
+spec:
+  template:
+    metadata:
+      labels:
+        app: mysqldb-order
+    spec:
+      containers:
+        - name: mysqldb-order
+          image: mysql
+          ports:
+            - containerPort: 3307
+          volumeMounts:
+            - mountPath: /data/db
+              name: storage
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+            - name: MYSQL_DATABASE
+              value: ticket-order-service
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc-order
+  selector:
+    matchLabels:
+      app: mysqldb-order

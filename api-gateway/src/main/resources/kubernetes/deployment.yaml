@@ -15,7 +15,7 @@ spec:
       containers:
         - name: api-gateway-app
           image: quocbao64/api-gateway:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
       restartPolicy: Always

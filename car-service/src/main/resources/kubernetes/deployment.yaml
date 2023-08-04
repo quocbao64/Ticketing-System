@@ -15,12 +15,12 @@ spec:
       containers:
         - name: car-service-app
           image: quocbao64/car-service:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8081
           env:
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://mysqldb:3306/ticket-car-service
+              value: jdbc:mysql://mysqldb-car:3306/ticket-car-service
             - name: SPRING_DATASOURCE_USERNAME
               value: root
             - name: SPRING_DATASOURCE_PASSWORD

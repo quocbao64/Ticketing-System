@@ -12,12 +12,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysqldb
+  name: mysqldb-car
   labels:
     name: mysql-service
 spec:
   selector:
-    app: mysqldb
+    app: mysqldb-car
   ports:
     - port: 3306
       targetPort: 3306
@@ -26,17 +26,17 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-deploy
+  name: mysql-car
   labels:
-    app: mysqldb
+    app: mysqldb-car
 spec:
   template:
     metadata:
       labels:
-        app: mysqldb
+        app: mysqldb-car
     spec:
       containers:
-        - name: mysqldb
+        - name: mysqldb-car
           image: mysql
           ports:
             - containerPort: 3306
@@ -54,4 +54,4 @@ spec:
             claimName: mysql-pvc
   selector:
     matchLabels:
-      app: mysqldb
+      app: mysqldb-car
