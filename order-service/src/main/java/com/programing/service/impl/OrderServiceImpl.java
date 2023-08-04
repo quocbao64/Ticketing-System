@@ -35,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
     private final KafkaTemplate<String, UpdateQuantityTicket> kafkaTemplate;
-
+    private final KafkaTemplate<String, OrderResponse> orderKafkaTemplate;
     @Override
     public Map<String, Object> getAll(Boolean statusPayment, Pageable pageable) {
         Page<Order> orderPage = null;
@@ -108,7 +108,6 @@ public class OrderServiceImpl implements OrderService {
 
         String busesUriRequest = "http://car-service/api/buses/" + request.getBusesId();
         Buses buses = null;
-
         try {
             buses = webClientBuilder.build().get()
                     .uri(busesUriRequest)
@@ -149,13 +148,17 @@ public class OrderServiceImpl implements OrderService {
         updateQuantityTicket.setId(order.getBusesId());
         updateQuantityTicket.setQuantity(order.getQuantity());
 
-        Message<UpdateQuantityTicket> message = MessageBuilder
+        Message<UpdateQuantityTicket> messageCreateTicket = MessageBuilder
                 .withPayload(updateQuantityTicket)
                 .setHeader(KafkaHeaders.TOPIC, "create-order")
                 .build();
+        kafkaTemplate.send(messageCreateTicket);
 
-        kafkaTemplate.send(message);
-
+        Message<OrderResponse> messageOrder = MessageBuilder
+                .withPayload(toOrderResponse(order))
+                .setHeader(KafkaHeaders.TOPIC, "send-mail")
+                .build();
+        orderKafkaTemplate.send(messageOrder);
     }
 
     @Override
@@ -164,6 +167,50 @@ public class OrderServiceImpl implements OrderService {
             throw new NotFoundException(404, "ID is not found!");
         });
 
+        Customer customer = order.getCustomer();
+        if(request.getEmail()!=null) {
+
+            customer.setEmail(request.getEmail());
+        }
+        if(request.getPhoneNumber()!=null) {
+            customer.setNumberPhone(request.getPhoneNumber());
+        }
+        if(request.getFullName()!=null) {
+            customer.setFullName(request.getFullName());
+        }
+
+        if(null!=request.getPickUpLocation()) {
+            order.setPickUpLocation(request.getPickUpLocation());
+        }
+
+        Buses buses = null;
+        String busesUriRequest = "http://car-service/api/buses/" + order.getBusesId();
+        if(null!=request.getBusesId())
+            busesUriRequest = "http://car-service/api/buses/" + request.getBusesId();
+
+        try {
+            buses = webClientBuilder.build().get()
+                    .uri(busesUriRequest)
+                    .retrieve()
+                    .bodyToMono(Buses.class)
+                    .block();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(buses==null)
+            throw new NotFoundException(404, "ID buses " + request.getBusesId() + " is not found!");
+
+        if(null!=request.getQuantity()) {
+            order.setQuantity(request.getQuantity());
+            order.setTotalPrice(buses.getTicketPrice()*order.getQuantity());
+        }
+        if(null!=request.getBusesId()) {
+            order.setBusesId(buses.getId());
+            order.setTotalPrice(buses.getTicketPrice()*order.getQuantity());
+        }
+
+        customerRepository.save(customer);
+        orderRepository.save(order);
     }
 
     @Override
@@ -172,6 +219,8 @@ public class OrderServiceImpl implements OrderService {
             throw new NotFoundException(404, "ID is not found!");
         });
 
+        order.setStatusPayment(!order.getStatusPayment());
+        orderRepository.save(order);
     }
 
     @Override
