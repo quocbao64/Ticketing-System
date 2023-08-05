@@ -27,7 +27,7 @@ public class MailService {
         helper.setText(email, true);
         helper.setTo(to);
         helper.setSubject("Info order ticket buses");
-        helper.setFrom("quocbao642002@gmail.com");
+        helper.setFrom("quoctrong.13022002@gmail.com");
         mailSender.send(mimeMessage);
 
     }
